@@ -5,6 +5,7 @@
  */
 package net.htlgrieskirchen.pos3.pcp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Producer /* implement this */ {
@@ -17,13 +18,19 @@ public class Producer /* implement this */ {
     
     public Producer(String name, Storage storage, int sleepTime, int numberOfItems) {
        // implement this
+        this.name = name;
+        this.storage = storage;
+        this.sleepTime = sleepTime;
+        this.numberOfItems = numberOfItems;
+        sent = new ArrayList<>();
+
     }
  
     // implement this
 
     public List<Integer> getSent() {
         // implement this
-        return null;
+        return sent;
     }
     
 }

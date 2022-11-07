@@ -18,11 +18,21 @@ public class Storage {
     
     public Storage() {
         // implement this
+        queue = new ArrayBlockingQueue<>(10);
+        fetchedCounter = 0;
+        storedCounter = 0;
+        underflowCounter = 0;
+        overflowCounter = 0;
+        productionComplete = false;
+
     }
     
     public synchronized boolean put(Integer data) throws InterruptedException {
         // implement this
-        return false;
+        //TODO make if
+        queue.add(data);
+        storedCounter++;
+        return true;
     }
  
     public synchronized Integer get() {
@@ -41,21 +51,21 @@ public class Storage {
 
     public int getFetchedCounter() {
         // implement this
-        return -1;
+        return fetchedCounter;
     }
 
     public int getStoredCounter() {
         // implement this
-        return -1;
+        return storedCounter;
     }
 
     public int getUnderflowCounter() {
         // implement this
-        return -1;
+        return underflowCounter;
     }
 
     public int getOverflowCounter() {
         // implement this
-        return -1;
+        return overflowCounter;
     }
 }
