@@ -8,7 +8,7 @@ package net.htlgrieskirchen.pos3.pcp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Producer /* implement this */ {
+public class Producer /* implement this */ implements Runnable {
     private final String name;
     private final Storage storage;
     private final int sleepTime;
@@ -28,9 +28,27 @@ public class Producer /* implement this */ {
  
     // implement this
 
+
     public List<Integer> getSent() {
         // implement this
         return sent;
     }
-    
+
+    @Override
+    public void run() {
+        synchronized (Storage.class) {
+            for (int i = 0; i <= numberOfItems; i++) {
+                try {
+                    if (storage.put(i)) sent.add(i);
+                    else
+                    {
+                            Thread.sleep(sleepTime);
+                    }
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            storage.setProductionComplete();
+        }
+    }
 }

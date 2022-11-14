@@ -29,24 +29,43 @@ public class Storage {
     
     public synchronized boolean put(Integer data) throws InterruptedException {
         // implement this
-        //TODO make if
-        queue.add(data);
-        storedCounter++;
-        return true;
+        boolean res = false;
+        if (queue.offer(data))
+        {
+            storedCounter++;
+            res = true;
+        }
+        else
+        {
+        overflowCounter++;
+        }
+        return res;
     }
  
     public synchronized Integer get() {
         // implement this
-        return null;
+        Integer res = null;
+
+        if (queue.poll() != null)
+        {
+            fetchedCounter++;
+            res = queue.poll();
+        }
+        else
+        {
+            underflowCounter++;
+        }
+        return res;
     }
 
     public boolean isProductionComplete() {
         // implement this
-        return false;
+        return productionComplete;
     }
 
     public void setProductionComplete() {
         // implement this
+        productionComplete = true;
     }
 
     public int getFetchedCounter() {

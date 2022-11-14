@@ -15,7 +15,7 @@ public class Consumer /* implement this */ implements Runnable{
     private final int sleepTime;
     
     private final List<Integer> received;
-    private boolean running;
+    private boolean running = true;
     
     public Consumer(String name, Storage storage, int sleepTime) {
         // implement this
@@ -35,6 +35,28 @@ public class Consumer /* implement this */ implements Runnable{
     @Override
     public void run() {
 
+        synchronized (Storage.class)
+        {
+        while (storage.isProductionComplete() && running)
+        {
+            Integer pro = storage.get();
+            if (pro != null)
+            {
+                received.add(pro);
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+            else
+            {
+
+                break;
+            }
+
+        }
+        }
     }
 }
 
