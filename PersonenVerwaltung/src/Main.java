@@ -44,12 +44,6 @@ public class Main {
 
         @Override
         public String toString() {
-            /*
-            "max müller with the id maxi1, birthday at 1.1.2002, male, works as ceo and gets 5000€ a month. \n" +
-                        "Works in Managment as a manager, contactable with as@gmial.com and 4353957373. \n" +
-                        "Starts working at 6:00 and ends at 13:00. \n " +
-                        "More infos: anmerkiungen"
-             */
             return Vorname() + " " + Nachname() + " mit der ID " + PersonID() + ", hat am " + Geburtstag() + " Geburtstag und ist " + Geschlecht() + ". Arbeitet als " + Jobtitel() +
                     " und verdient " + Gehalt() + " Euro im Monat. \n" + "Arbeitet im Abteil " + Abteilung() + ", erreichbar per " + Email() + " oder " + Telefonnr() + ". \n" +
                     " Faengt um  " + Arbeitsstart() + " an und hoert um " + Arbeitsende() + " auf. \n" + "Mehr infos: " + notes();
@@ -75,7 +69,14 @@ public class Main {
 
         int input = -1;
 
-        //load old persons
+        try {
+            persons = DataWriter.load();
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException(e);
+        }
+
 
 
         while (input != 7)
@@ -154,6 +155,14 @@ public class Main {
 
        persons.add(new Person(personID, firstname, lastname, birthday, sex, salary, adresse, phoneNr, email, jobtitle,
                               department, starttime, endtime, notes));
+
+       try {
+           DataWriter.save(persons);
+       }
+       catch (Exception e)
+       {
+           throw new RuntimeException(e);
+       }
 
    }
 
@@ -266,6 +275,14 @@ public class Main {
                         break;
                 }
 
+                try {
+                    DataWriter.save(persons);
+                }
+                catch (Exception e)
+                {
+                    System.out.println("Saving File didnt work! (in Main)");
+                }
+
                 return;
             }
         }
@@ -279,6 +296,13 @@ public class Main {
         for (int i = 0; i < persons.size(); i++) {
             if (persons.get(i).Nachname.equals(input)) persons.remove(i);
             System.out.println("Person wurde gefunden und entfernt");
+            try {
+                DataWriter.save(persons);
+            }
+            catch (Exception e)
+            {
+                System.out.println("Saving File didnt work! (in Main)");
+            }
             return;
         }
         System.out.println(input + " nicht gefunden!");
@@ -369,7 +393,7 @@ public class Main {
 
         for (int i = 0; i < persons.size(); i++) {
             average_salary = average_salary + persons.get(i).Gehalt;
-            counter_for_salary = i;
+            counter_for_salary++;
         }
 
         System.out.print((average_salary/counter_for_salary));
@@ -380,7 +404,7 @@ public class Main {
         int lowest = 0;
 
         for (int i = 0; i < persons.size(); i++) {
-            if (persons.get(i).Gehalt > lowest) lowest = persons.get(i).Gehalt;
+            if (persons.get(i).Gehalt < lowest) lowest = persons.get(i).Gehalt;
         }
 
         System.out.print(lowest);
