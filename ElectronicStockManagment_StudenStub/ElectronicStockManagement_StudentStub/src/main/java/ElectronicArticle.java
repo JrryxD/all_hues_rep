@@ -1,5 +1,6 @@
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.Objects;
 
 public class ElectronicArticle {
@@ -60,12 +61,16 @@ public class ElectronicArticle {
     // implement toString here
     @Override
     public String toString() {
-        return null;
+        return getArticleNumber() + " - " + getArticleName() + " (" + getStock() + ") Preis: " +
+               getPrice() + " Bestelldatum: " + getOrderDate().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
     // implement equals here
     @Override
     public boolean equals(Object o) {
-       return false;
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ElectronicArticle that = (ElectronicArticle) o;
+        return articleName.equals(that.articleName);
     }
 }

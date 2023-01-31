@@ -1,0 +1,24 @@
+Enemy KI:
+
+checken ob Row oder Column gleich ist wie beim Spieler
+
+Wenn Row gleich ist prüft er Columns;
+
+Wenn Columns geich ist prüft er Row;
+
+Wenn keines Gleich ist macht er eines von Beiden Random
+
+-------------------------------------------------------------------------------
+Rows
+
+wenn der Gegen eine Höhere Row als der Spieler hat geht er eine Row zurück solange nix im weg ist
+
+wenn der Gegen eine Niedrigere Row als der Spieler hat geht er eine Row vor solange nix im weg ist
+---------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------
+Columns
+
+wenn der Gegen eine Höhere Column als der Spieler hat geht er eine Column zurück solange nix im weg ist
+
+wenn der Gegen eine Niedrigere Column als der Spieler hat geht er eine Column vor solange nix im weg ist
+--------------------------------------------------------------------------------------

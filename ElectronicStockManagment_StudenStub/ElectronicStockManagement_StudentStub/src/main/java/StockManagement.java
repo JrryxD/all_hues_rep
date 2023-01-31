@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,6 +20,7 @@ public class StockManagement {
     }
 
     public void loadStockFiles() throws IOException {
+        articles = ArticleFileManager.readStockFile("stock.csv");
     }
 
     /* Diese Methode wird zum Testen benötigt */
@@ -27,29 +29,41 @@ public class StockManagement {
     }
 
     public void printArticles(List<ElectronicArticle> articlesToPrint) {
+        articlesToPrint.forEach((n) -> System.out.println(n.toString()));
     }
 
     public void printAllArticles() {
+        printArticles(articles);
     }
 
     public List<ElectronicArticle> selectSoldArticles() {
-        return null;
+        return articles.stream().filter((n) -> n.getStock() != 0).collect(Collectors.toList());
     }
 
     public List<ElectronicArticle> selectArticlesWherePriceIsLessThan(float price) {
-        return null;
+        return articles.stream().filter((n) -> n.getPrice() <= price).collect(Collectors.toList());
     }
 
     public List<ElectronicArticle> sortArticlesDependingOnDate() {
-        return null;
+        return articles.stream().sorted(Comparator.comparing(ElectronicArticle::getOrderDate).reversed()).collect(Collectors.toList());
     }
 
     public List<ElectronicArticle> selectArticlesAfterDate(int date) {
-        return null;
+        return articles.stream().filter((n) -> n.getOrderDate()
+                .isAfter(LocalDate.of(Integer
+                        .parseInt(String.valueOf(date).substring(0, 3)),
+                        Integer.parseInt(String.valueOf(date).substring(4, 5)),
+                        Integer.parseInt(String.valueOf(date).substring(6, 7))))
+                        || n.getOrderDate()
+                .isEqual(LocalDate.of(Integer
+                                .parseInt(String.valueOf(date).substring(0, 3)),
+                        Integer.parseInt(String.valueOf(date).substring(4, 5)),
+                        Integer.parseInt(String.valueOf(date).substring(6, 7)))))
+                .collect(Collectors.toList());
     }
 
     public double calculateAverageArticlePrice() {
-        return 0;
+        return articles.stream().mapToDouble((ElectronicArticle::getPrice)).average().getAsDouble();
     }
 
     public double calculateStockValueSerial() {
@@ -61,7 +75,7 @@ public class StockManagement {
     }
 
     public List<ElectronicArticle> selectTopNArticlesDependingOnPrice(int n) {
-        return null;
+        return articles.stream().limit(n).sorted(Comparator.comparing(ElectronicArticle::getPrice).reversed()).collect(Collectors.toList());
     }
 
     public String selectLongestArticleName() {
