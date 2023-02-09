@@ -1,10 +1,11 @@
-package doom.switchtext.com;
+package doom.switchtext.com.models;
 
 public class Player {
     String skin;
     int health;
 
     Location pLocation;
+
 
     public Player(String skin, int health, Location pLocation) {
         this.skin = skin;
@@ -35,4 +36,5 @@ public class Player {
     public void setpLocation(Location pLocation) {
         this.pLocation = pLocation;
     }
+
 }

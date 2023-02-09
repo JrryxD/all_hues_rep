@@ -1,51 +1,39 @@
-package doom.switchtext.com;
+package doom.switchtext.com.enemys;
+
+import doom.switchtext.com.Game;
+import doom.switchtext.com.models.Location;
 
 import java.util.Random;
 
-public class Enemy {
+public sealed class Enemy permits Dwarf, Elf, Wizard, Rogue{
 
-    String element, role;
+    String role, skin;
     Location lEnemy;
-
-    String direction;
 
     int health, attackpoints;
 
+    Game g = new Game();
+    String[][] tempfield = g.getField();
 
-    public Enemy(String element, Location lEnemy, String role)
+    public Enemy(Location lEnemy, String role, int health, int attackpoints, String skin)
     {
-        this.element = element;
-        this.lEnemy = lEnemy;
-        this.role = role;
-    }
-
-    public Enemy(String element, Location lEnemy, String role, String direction, int health, int attackpoints)
-    {
-        this.element = element;
         this.lEnemy = lEnemy;
         this.role = role;
         this.health = health;
         this.attackpoints = attackpoints;
-    }
-
-    public void setElement(String element) {
-        this.element = element;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getDirection() {
-        return direction;
-    }
-
-    public void setDirection(String direction) {
-        this.direction = direction;
+        this.skin = skin;
     }
 
     public int getHealth() {
         return health;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public String getSkin() {
+        return skin;
     }
 
     public void setHealth(int health) {
@@ -56,20 +44,12 @@ public class Enemy {
         return attackpoints;
     }
 
-    public void setAttackpoints(int attackpoints) {
-        this.attackpoints = attackpoints;
-    }
-
     public Location getlEnemy() {
         return lEnemy;
     }
 
     public void setlEnemy(Location lEnemy) {
         this.lEnemy = lEnemy;
-    }
-
-    public String getElement() {
-        return element;
     }
 
     public int getLEnemyX() {
@@ -80,14 +60,9 @@ public class Enemy {
         return lEnemy.getY();
     }
 
-    public String getRole() {
-        return role;
-    }
-
     public Location nextMove()
     {
         if (role.equals("runner")) return followMove();
-        else if (role.equals("guard")) return guardMove();
         else return randomMove();
     }
 
@@ -96,10 +71,7 @@ public class Enemy {
 
         String[][] tempField = game.getField();
 
-        Random random = new Random();
-        int ranInput = random.nextInt(5) + 1;
-
-        switch (ranInput)
+        switch (getRandom(5))
         {
             case 1 ->
             {
@@ -121,7 +93,7 @@ public class Enemy {
             }
             case 4 ->
             {
-                if(tempField[getLEnemyX()-1][getLEnemyY()+1].equals(" "))
+                if(tempField[getLEnemyX()][getLEnemyY()+1].equals(" "))
                     return new Location(getLEnemyX(), getLEnemyY() + 1);
                 else return nextMove();
             }
@@ -133,15 +105,32 @@ public class Enemy {
 
     private Location followMove()
     {
-        return null;
-        //TODO follow with EnemyKI (EnemyKI.txt in projekt)
+
+        if (getLEnemyX() == g.getP().getpLocation().getX()) return checkY();
+        else  if (getLEnemyY() == g.getP().getpLocation().getY()) return checkX();
+        else {
+            if (getRandom(2) == 2) return checkY();
+            else return checkX();
+        }
     }
 
-    private Location guardMove()
+    private Location checkX()
     {
-        return null;
-        //TODO go only up - down or only right - left;
+        if (getLEnemyX() > g.getP().getpLocation().getX() && tempfield[getLEnemyX()-1][getLEnemyY()].equals(" ")) return new Location(getLEnemyX()-1, getLEnemyY());
+        else if (getLEnemyX() < g.getP().getpLocation().getX() && tempfield[getLEnemyX()+1][getLEnemyY()].equals(" ")) return new Location(getLEnemyX()+1, getLEnemyY());
+        else return getlEnemy();
     }
 
+    private Location checkY()
+    {
+        if (getLEnemyY() > g.getP().getpLocation().getY() && tempfield[getLEnemyX()][getLEnemyY()-1].equals(" ")) return new Location(getLEnemyX(), getLEnemyY()-1);
+        else if (getLEnemyY() < g.getP().getpLocation().getY() && tempfield[getLEnemyX()][getLEnemyY()+1].equals(" ")) return new Location(getLEnemyX(), getLEnemyY()+1);
+        else return getlEnemy();
+    }
 
+    private int getRandom(int max)
+    {
+        Random random = new Random();
+        return (random.nextInt(max) + 1);
+    }
 }
